@@ -70,28 +70,43 @@ const sidebarNavItems = [
 
 interface SidebarProps {
   className?: string;
+  isCollapsed?: boolean;
 }
 
-export function Sidebar({ className }: SidebarProps) {
+export function Sidebar({ className, isCollapsed = false }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <div className={cn("pb-12 w-64", className)}>
+    <div className={cn(
+      "pb-12 border-r bg-background transition-all duration-300 ease-in-out",
+      isCollapsed ? "w-16" : "w-64",
+      className
+    )}>
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center">
-              <img 
-                src="/ggailabs-logo.png" 
-                alt="GG.AI Labs Logo" 
-                className="w-8 h-8 mr-2"
-              />
-              <div>
-                <h2 className="text-lg font-semibold">LeadFlow</h2>
-                <p className="text-xs text-muted-foreground">by GG.AI Labs</p>
-              </div>
+              {isCollapsed ? (
+                <img 
+                  src="/ggailabs-logo.png" 
+                  alt="GG.AI Labs Logo" 
+                  className="w-8 h-8"
+                />
+              ) : (
+                <>
+                  <img 
+                    src="/ggailabs-logo.png" 
+                    alt="GG.AI Labs Logo" 
+                    className="w-8 h-8 mr-2"
+                  />
+                  <div>
+                    <h2 className="text-lg font-semibold">LeadFlow</h2>
+                    <p className="text-xs text-muted-foreground">by GG.AI Labs</p>
+                  </div>
+                </>
+              )}
             </div>
-            <ThemeToggle />
+            {!isCollapsed && <ThemeToggle />}
           </div>
           <div className="space-y-1">
             {sidebarNavItems.map((item) => {
@@ -101,14 +116,19 @@ export function Sidebar({ className }: SidebarProps) {
                   key={item.href}
                   variant={isActive ? "secondary" : "ghost"}
                   className={cn(
-                    "w-full justify-start",
-                    isActive && "bg-secondary"
+                    "w-full justify-start transition-all duration-300",
+                    isActive && "bg-secondary",
+                    isCollapsed ? "px-2" : "px-3"
                   )}
                   asChild
+                  title={isCollapsed ? item.title : undefined}
                 >
                   <Link href={item.href}>
-                    <item.icon className="mr-2 h-4 w-4" />
-                    {item.title}
+                    <item.icon className={cn(
+                      "h-4 w-4",
+                      isCollapsed ? "" : "mr-2"
+                    )} />
+                    {!isCollapsed && item.title}
                   </Link>
                 </Button>
               );
