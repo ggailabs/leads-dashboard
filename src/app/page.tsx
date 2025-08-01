@@ -27,12 +27,12 @@ interface Lead {
 }
 
 const statusColors = {
-  NEW: "bg-blue-100 text-blue-800",
-  CONTACTED: "bg-yellow-100 text-yellow-800",
-  QUALIFIED: "bg-green-100 text-green-800",
-  PROPOSAL_SENT: "bg-purple-100 text-purple-800",
-  CLOSED_WON: "bg-emerald-100 text-emerald-800",
-  CLOSED_LOST: "bg-red-100 text-red-800",
+  NEW: "bg-blue-600 text-blue-100",
+  CONTACTED: "bg-yellow-600 text-yellow-100",
+  QUALIFIED: "bg-green-600 text-green-100",
+  PROPOSAL_SENT: "bg-purple-600 text-purple-100",
+  CLOSED_WON: "bg-emerald-600 text-emerald-100",
+  CLOSED_LOST: "bg-red-600 text-red-100",
 };
 
 const statusLabels = {
@@ -151,8 +151,8 @@ export default function Dashboard() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard de Leads</h1>
-          <p className="text-muted-foreground">Acompanhe seus leads do WhatsApp em tempo real</p>
+          <h1 className="text-3xl font-bold tracking-tight">GG.AI Labs LeadFlow</h1>
+          <p className="text-muted-foreground">Plataforma de gestão de leads com integração WhatsApp e IA</p>
         </div>
         <Button className="gap-2">
           <Plus className="h-4 w-4" />

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,21 +16,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dashboard de Leads WhatsApp",
-  description: "Acompanhe seus leads do WhatsApp em tempo real",
-  keywords: ["WhatsApp", "Leads", "Dashboard", "Baileys", "CRM"],
-  authors: [{ name: "Lead Dashboard Team" }],
+  title: "GG.AI Labs LeadFlow",
+  description: "Plataforma de gestão de leads com integração WhatsApp e IA",
+  keywords: ["WhatsApp", "Leads", "Dashboard", "Baileys", "CRM", "IA", "GG.AI Labs"],
+  authors: [{ name: "GG.AI Labs" }],
   openGraph: {
-    title: "Dashboard de Leads WhatsApp",
-    description: "Acompanhe seus leads do WhatsApp em tempo real",
-    url: "https://seu-dominio.com",
-    siteName: "Lead Dashboard",
+    title: "GG.AI Labs LeadFlow",
+    description: "Plataforma de gestão de leads com integração WhatsApp e IA",
+    url: "https://www.ggailabs.com",
+    siteName: "GG.AI Labs LeadFlow",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dashboard de Leads WhatsApp",
-    description: "Acompanhe seus leads do WhatsApp em tempo real",
+    title: "GG.AI Labs LeadFlow",
+    description: "Plataforma de gestão de leads com integração WhatsApp e IA",
   },
 };
 
@@ -43,10 +44,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
-        <DashboardLayout>
-          {children}
-        </DashboardLayout>
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <DashboardLayout>
+            {children}
+          </DashboardLayout>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

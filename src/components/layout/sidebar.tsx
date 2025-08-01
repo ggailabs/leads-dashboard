@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { 
   Home, 
   Smartphone, 
@@ -78,9 +79,19 @@ export function Sidebar({ className }: SidebarProps) {
     <div className={cn("pb-12 w-64", className)}>
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
-          <div className="flex items-center mb-6">
-            <MessageSquare className="h-8 w-8 mr-2" />
-            <h2 className="text-lg font-semibold">Leads WhatsApp</h2>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <img 
+                src="/ggailabs-logo.png" 
+                alt="GG.AI Labs Logo" 
+                className="w-8 h-8 mr-2"
+              />
+              <div>
+                <h2 className="text-lg font-semibold">LeadFlow</h2>
+                <p className="text-xs text-muted-foreground">by GG.AI Labs</p>
+              </div>
+            </div>
+            <ThemeToggle />
           </div>
           <div className="space-y-1">
             {sidebarNavItems.map((item) => {
