@@ -13,6 +13,143 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Lead {
+  id              String   @id @default(cuid())
+  name            String?
+  phone           String   @unique
+  email           String?
+  status          LeadStatus @default(NEW)
+  source          String   @default("whatsapp")
+  notes           String?
+  lastContact     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  messages        WhatsAppMessage[]
+  agentAssignments AgentAssignment[]
+  
+  @@map("leads")
+}
+
+model WhatsAppMessage {
+  id        String   @id @default(cuid())
+  leadId    String
+  message   String
+  direction MessageDirection @default(INCOMING)
+  timestamp DateTime @default(now())
+  mediaUrl  String?
+  mediaType String?
+  
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  
+  @@map("whatsapp_messages")
+}
+
+model AIProvider {
+  id          String   @id @default(cuid())
+  name        String
+  apiKey      String
+  baseUrl     String?
+  model       String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  agents      AIAgent[]
+  campaigns   AICampaign[]
+  
+  @@map("ai_providers")
+}
+
+model AIAgent {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  systemPrompt String
+  providerId  String
+  model       String
+  temperature Float    @default(0.7)
+  maxTokens   Int      @default(1000)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  provider    AIProvider @relation(fields: [providerId], references: [id])
+  assignments AgentAssignment[]
+  campaigns   AICampaign[]
+  
+  @@map("ai_agents")
+}
+
+model AgentAssignment {
+  id        String   @id @default(cuid())
+  leadId    String
+  agentId   String
+  status    AssignmentStatus @default(ACTIVE)
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  agent     AIAgent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  
+  @@unique([leadId, agentId])
+  @@map("agent_assignments")
+}
+
+model AICampaign {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  providerId  String
+  agentId     String
+  message     String
+  status      CampaignStatus @default(DRAFT)
+  targetLeads Int      @default(0)
+  sentCount   Int      @default(0)
+  deliveredCount Int  @default(0)
+  repliedCount Int   @default(0)
+  scheduledAt DateTime?
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  provider    AIProvider @relation(fields: [providerId], references: [id])
+  agent       AIAgent    @relation(fields: [agentId], references: [id])
+  
+  @@map("ai_campaigns")
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL_SENT
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+enum MessageDirection {
+  INCOMING
+  OUTGOING
+}
+
+enum AssignmentStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  RUNNING
+  PAUSED
+  COMPLETED
+  FAILED
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
